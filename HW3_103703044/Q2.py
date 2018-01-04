@@ -2,7 +2,35 @@ import numpy as np
 import math
 from PIL import Image
 from scipy.fftpack import dct
+import pandas
+import os
+import csv
+import sift
+
 partitionSize = 8
+def Q2_offline_run(inputs,fileList):
+	rank = []
+	distance = [[1.0,""]for j in xrange(len(fileList))]
+	index = int(inputs[7:-4]) * 4
+	with open('./offline/Q2_DCTData.csv','rb') as file:
+		reader = csv.reader(file)
+		data = [row for row in reader]
+		length = partitionSize
+		bases = [[0 for _ in xrange(int(math.pow(length,2)))]for _ in xrange(3)]
+		comparison = [[0 for _ in xrange(int(math.pow(length,2)))]for _ in xrange(3)]
+		for i in xrange(len(data[index])-1):
+			for j in xrange(3):
+				bases[j][i] = float(data[index+j+1][i+1])
+
+		for x in xrange(len(fileList)):
+			for i in xrange(len(data[x*4])-1):
+				for j in xrange(3):
+					comparison[j][i] = float(data[x*4+j+1][i+1])
+			distance[x][0] = matchFunc(bases,comparison)
+			distance[x][1] = data[x*4][0]
+		rank = sorted(distance, key = lambda x : x[0])[:10]
+		return rank
+
 
 def Q2_run(inputs,fileList):
 	partition = partitionFunc(inputs)
@@ -155,3 +183,21 @@ def matrixConverter(inputs):
 				matrix[i][j] = inputs[count]
 				count += 1
 	return matrix
+
+def data_generator(inputs):
+	image = Image.open("./dataset/" + inputs)
+	imagePartition = partitionFunc(image)
+	imageYcbCr = YCbCrConverter(imagePartition)
+	imageDCT = DCTConverter(imageYcbCr)
+	zigZagDCT = zigZagConverter(imageDCT)
+	return zigZagDCT
+
+if __name__ == '__main__':
+	path = "./dataset/"
+	fileList = os.listdir("./dataset/")
+	if os.path.exists("./offline/Q2_DCTData.csv"):
+		os.remove("./offline/Q2_DCTData.csv")
+	with open("./offline/Q2_DCTData.csv",'a') as save:
+		for imageName in fileList:
+			data = pandas.DataFrame(data_generator(imageName))
+			data.to_csv(save,header=True,index_label = imageName)

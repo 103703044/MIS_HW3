@@ -92,12 +92,14 @@ def startSearching (fileName, mode):
     baseImage = Image.open(fileName)
     fileList = os.listdir(fileName[:-16])
     fileName = fileName[-16:]
-
     if mode == "Q1-ColorHistogram":
         rank = Q1.Q1_run(baseImage,fileList)
   
     elif mode == "Q2-ColorLayout":
-        rank = Q2.Q2_run(baseImage,fileList)
+        if os.path.exists("./offline/Q2_DCTData.csv"):
+            rank = Q2.Q2_offline_run(fileName,fileList)
+        else:
+            rank = Q2.Q2_run(baseImage,fileList)
 
 
     elif mode == "Q3-SIFT Visual Words":
@@ -117,7 +119,7 @@ if __name__ == '__main__':
     root = Tk()
     size = 220, 220
     app = Example(root)
-    root.geometry("950x750")
+    root.geometry("1000x800")
     root.mainloop()
  
 

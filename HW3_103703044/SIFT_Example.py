@@ -4,7 +4,7 @@
 from PIL import Image
 from numpy import array
 import sift
-from pylab import *
+from matplotlib import *
 
 
 imname = 'Penguins.jpg'

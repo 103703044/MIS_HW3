@@ -4,7 +4,7 @@
 from PIL import Image
 import os
 from numpy import *
-from pylab import *
+from matplotlib import *
 
 
 def process_image(imagename,resultname,params="--edge-thresh 10 --peak-thresh 5"):
