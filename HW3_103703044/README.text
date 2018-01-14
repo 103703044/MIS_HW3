@@ -1,0 +1,11 @@
+HW3_103703044
+#/MIS_HW3操作流程:
+1.執行Q2.py，產生csv檔的offlineData，存於"offline"資料夾內。（資料夾內已有，可略過）
+
+2.執行SIFT_Converter.py產生各圖片的sift檔，存於"offline/sift"資料夾內。（資料夾內已有，可略過）
+
+3.執行Q3.py(需存在sift檔)，產生csv檔的offlineData，存於"offline"資料夾內。（資料夾內已有，可略過）
+
+4.執行Search_Gui.py，開啟GUI介面，選擇檔案、模式，最後按下"SEARCH"搜尋。
+
+5.10張圖片會顯示於下側，上排從左到右為計算距離最相近的1~5張，下排左到右是6~10張。
