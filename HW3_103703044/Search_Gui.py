@@ -16,7 +16,8 @@ from PIL import Image
 import math
 import Q1
 import Q2
-# from utility import *
+import Q3
+import Q4
 
 global imgs
 global thumb
@@ -45,8 +46,6 @@ class Example(Frame):
 
         #Default_file
         self.fileName = StringVar(value = "./dataset/ukbench00000.jpg")
-        # albl = Label(self, textvariable = self.fileName)
-        # albl.grid(row=0, column=2, columnspan=3, pady=5, sticky=W)
 
         #Image_SelectedFile
         self.thumb = Label(self)
@@ -56,12 +55,11 @@ class Example(Frame):
         self.thumb.configure(image = image)
         self.thumb.image = image
 
-
         #mode_SelectMode
         Label(self, text = "Select Mode: ").grid(row=1, column=0, pady=5)
         mode = StringVar(self)
         #default
-        mode.set("Q2-ColorLayout")
+        mode.set("Q3-SIFT Visual Words")
         om = OptionMenu(self, mode, "Q1-ColorHistogram", "Q2-ColorLayout", "Q3-SIFT Visual Words", "Q4-Visual Words using stop words")
         om.grid(row=1, column=1, pady=5, sticky=W)
 
@@ -72,13 +70,6 @@ class Example(Frame):
         for i in xrange(10):
             self.imgs.append(Label(self))
             self.imgs[i].grid(row=i/5+4, column=i%5, padx=5, pady=10)
-
-        # self.thumb = Label(self)
-        # self.thumb.grid(row=0, column=1, pady=5, sticky=W)
-        # image = Image.open(self.fileName.get())
-        # image = ImageTk.PhotoImage(image.resize((image.size[0]/2, image.size[1]/2),Image.ANTIALIAS))
-        # self.thumb.configure(image = image)
-        # self.thumb.image = image
  
 def openFile ():
     fileName = tkFileDialog.askopenfilename(initialdir = "./dataset")
@@ -103,9 +94,11 @@ def startSearching (fileName, mode):
 
 
     elif mode == "Q3-SIFT Visual Words":
-    	print "Q3"
+    	if os.path.exists("./offline/Q3.csv"):
+            rank = Q3.Q3_offline_run(fileName,fileList)
     elif mode == "Q4-Visual Words using stop words":
-    	print "Q4"
+        if os.path.exists("./offline/Q3.csv"):
+            rank = Q4.Q4_offline_run(fileName,fileList)
 
     for i in xrange(10):
         imgName = "./dataset/" + rank[i][1]

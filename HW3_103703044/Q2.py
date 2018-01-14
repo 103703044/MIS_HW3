@@ -174,15 +174,6 @@ def matchFunc(bases,comparison):
 	distance = DYSum + DCbSum + DCrSum
 	return distance
 
-def matrixConverter(inputs):
-	length = int(math.sqrt(len(inputs)))
-	matrix = [[ 0 for _ in xrange(length)]for _ in xrange(length)]
-	count = 0
-	for i in xrange(length):
-		for j in xrange(length):
-				matrix[i][j] = inputs[count]
-				count += 1
-	return matrix
 
 def data_generator(inputs):
 	image = Image.open("./dataset/" + inputs)
@@ -201,3 +192,4 @@ if __name__ == '__main__':
 		for imageName in fileList:
 			data = pandas.DataFrame(data_generator(imageName))
 			data.to_csv(save,header=True,index_label = imageName)
+			print imageName + " has finished."
